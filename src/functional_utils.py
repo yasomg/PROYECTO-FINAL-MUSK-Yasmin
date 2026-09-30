@@ -1,3 +1,6 @@
+from functools import reduce
+
+
 # Filtra ventas por categoría:
 def filter_sales_by_category(sales, category):      
     return list(filter(lambda sale: sale.category == category, sales))
@@ -10,3 +13,10 @@ def filter_sales_by_client(sales, client_id):
 # Extrae los importes de una lista de ventas:
 def amount_list(sales):
     return list(map(lambda sale: sale.amount, sales))
+
+# Suma una lista de importes:
+def total_amount(amounts):
+    return reduce(lambda acumulado, siguiente: acumulado + siguiente, amounts, 0)
+
+
+
