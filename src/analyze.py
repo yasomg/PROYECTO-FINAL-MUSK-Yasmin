@@ -56,6 +56,23 @@ def generate_report():
     total_sales = len(ventas)
     total_revenue = total_amount(amount_list(ventas))
 
+    # Estructura clients:
+    lista_clients = []
+    for cliente in clientes:
+        client_id = cliente.client_id
+        name = cliente.name
+        total_spent = coleccion_ventas.total_amount_by_client(client_id)
+        sale_count = len(coleccion_ventas.sales_by_client(client_id))
+        average_sale = round(coleccion_ventas.average_sale_by_client(client_id), 2)
+
+        lista_clients.append({"client_id": client_id,
+                             "name": name,
+                             "total_spent": total_spent,
+                             "sale_count": sale_count,
+                             "average_sale": average_sale
+                             })
+
+        
 
 
 
@@ -63,9 +80,16 @@ def generate_report():
     report = {
                 "summary": {"total_clients": total_clients,
                             "total_sales": total_sales,
-                            "total_revenue": total_revenue} 
-                
+                            "total_revenue": total_revenue},
+
+                "clients": lista_clients,
+
+
+
+
              }
+
+    
 
     return report
 
