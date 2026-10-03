@@ -6,17 +6,17 @@ from src.sale import Sale
 from src.client_collection import ClientCollection
 from src.sales_collection import SalesCollection
 
+from src.functional_utils import amount_list, total_amount
+
 
 
 def generate_report():
     # Con estos dos with open completamos la parte de leer datos.
     with open("data/clients.json", "r", encoding="utf-8") as clients_json:
         datos_clientes = json.load(clients_json)
-        print(datos_clientes)
 
     with open("data/sales.csv", "r", encoding="utf-8") as sales_csv:
         filas_ventas = list(csv.DictReader(sales_csv))
-        print(filas_ventas)
 
 
     # Con esto recorremos cada lista creando un objeto por cada diccionario.
@@ -49,9 +49,39 @@ def generate_report():
     coleccion_ventas = SalesCollection(ventas)
     
 
+    
 
-    # print(clientes[0].name, clientes[0].country)
-    # print(venta[0].sale_id, venta[0].product)
+    # Estructura summary:
+    total_clients = len(clientes)
+    total_sales = len(ventas)
+    total_revenue = total_amount(amount_list(ventas))
+
+
+
+
+    # DICCIONARIO REPORT:
+    report = {
+                "summary": {"total_clients": total_clients,
+                            "total_sales": total_sales,
+                            "total_revenue": total_revenue} 
+                
+             }
+
+    return report
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
