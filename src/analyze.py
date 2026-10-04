@@ -8,7 +8,7 @@ from src.sale import Sale
 from src.client_collection import ClientCollection
 from src.sales_collection import SalesCollection
 
-from src.functional_utils import amount_list, total_amount
+from src.functional_utils import amount_list, total_amount, filter_sales_by_category, filter_sales_by_client
 
 
 def generate_report():
@@ -118,6 +118,26 @@ def generate_report():
 
     ventas_por_categoria = df_ventas.groupby("category")["amount"].sum().round(2).to_dict()
     
+    # Cálculo 8: cliente con más ventas en una categoría concreta.
+    # No tiene clave en la estructura JSON que pide el enunciado
+    categoria_objetivo = "Electronics"
+
+    ventas_de_categoria = filter_sales_by_category(ventas, categoria_objetivo)
+
+    mejor_recuento = 0
+    cliente_con_mas_ventas_en_electronics = None
+
+    for cliente in clientes:
+        recuento_cliente = len(filter_sales_by_client(ventas_de_categoria, cliente.client_id))
+        if recuento_cliente > mejor_recuento:
+            mejor_recuento = recuento_cliente
+            cliente_con_mas_ventas_en_electronics = cliente.name
+    
+
+  
+
+
+
     # Estructura high_spending_clients:
     lista_clientes_gasto_alto = []
     umbral_alto_gasto = 500
