@@ -118,7 +118,7 @@ def generate_report():
 
     ventas_por_categoria = df_ventas.groupby("category")["amount"].sum().to_dict()
     
-    # Estructura high-spending_clients:
+    # Estructura high_spending_clients:
     lista_clientes_gasto_alto = []
     umbral_alto_gasto = 500
 
@@ -126,6 +126,11 @@ def generate_report():
         if dict_cliente["total_spent"] > umbral_alto_gasto:
             lista_clientes_gasto_alto.append(dict_cliente["name"])
 
+
+    # Estructura monthly_sales (CON PANDAS):
+    df_ventas["month"] = pd.to_datetime(df_ventas["date"]).dt.strftime("%Y-%m")
+
+    ventas_por_mes = df_ventas.groupby("month")["amount"].sum().to_dict()
 
     
         
@@ -142,10 +147,9 @@ def generate_report():
 
                 "sales_by_category": ventas_por_categoria,
 
-                "high_spending_clients": lista_clientes_gasto_alto
+                "high_spending_clients": lista_clientes_gasto_alto,
 
-
-
+                "monthly_sales": ventas_por_mes
 
              }
 
