@@ -55,7 +55,7 @@ def generate_report():
     # Estructura summary:
     total_clients = len(clientes)
     total_sales = len(ventas)
-    total_revenue = total_amount(amount_list(ventas))
+    total_revenue = round(total_amount(amount_list(ventas)), 2)
 
     # Estructura clients:
     lista_clients = []
@@ -116,7 +116,7 @@ def generate_report():
 
     df_ventas = pd.DataFrame(lista_dicts_ventas)
 
-    ventas_por_categoria = df_ventas.groupby("category")["amount"].sum().to_dict()
+    ventas_por_categoria = df_ventas.groupby("category")["amount"].sum().round(2).to_dict()
     
     # Estructura high_spending_clients:
     lista_clientes_gasto_alto = []
@@ -126,11 +126,10 @@ def generate_report():
         if dict_cliente["total_spent"] > umbral_alto_gasto:
             lista_clientes_gasto_alto.append(dict_cliente["name"])
 
-
     # Estructura monthly_sales (CON PANDAS):
     df_ventas["month"] = pd.to_datetime(df_ventas["date"]).dt.strftime("%Y-%m")
 
-    ventas_por_mes = df_ventas.groupby("month")["amount"].sum().to_dict()
+    ventas_por_mes = df_ventas.groupby("month")["amount"].sum().round(2).to_dict()
 
     
         
@@ -153,7 +152,12 @@ def generate_report():
 
              }
 
-    
 
     return report
 
+
+if __name__ == "__main__":
+    informe = generate_report()
+
+    with open("final_report.json", "w", encoding="utf-8") as archivo:
+        json.dump(informe, archivo, indent=2, ensure_ascii=False)
