@@ -11,8 +11,6 @@ from src.sales_collection import SalesCollection
 from src.functional_utils import amount_list, total_amount
 
 
-
-
 def generate_report():
     # Con estos dos with open completamos la parte de leer datos.
     with open("data/clients.json", "r", encoding="utf-8") as clients_json:
@@ -120,6 +118,13 @@ def generate_report():
 
     ventas_por_categoria = df_ventas.groupby("category")["amount"].sum().to_dict()
     
+    # Estructura high-spending_clients:
+    lista_clientes_gasto_alto = []
+    umbral_alto_gasto = 500
+
+    for dict_cliente in lista_clients:
+        if dict_cliente["total_spent"] > umbral_alto_gasto:
+            lista_clientes_gasto_alto.append(dict_cliente["name"])
 
 
     
@@ -135,7 +140,9 @@ def generate_report():
 
                 "top_client_by_country": pais_y_nombre,
 
-                "sales_by_category": ventas_por_categoria
+                "sales_by_category": ventas_por_categoria,
+
+                "high_spending_clients": lista_clientes_gasto_alto
 
 
 
