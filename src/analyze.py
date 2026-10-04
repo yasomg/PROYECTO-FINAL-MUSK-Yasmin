@@ -1,12 +1,15 @@
 import json
 import csv
 
+import pandas as pd
+
 from src.client import Client
 from src.sale import Sale
 from src.client_collection import ClientCollection
 from src.sales_collection import SalesCollection
 
 from src.functional_utils import amount_list, total_amount
+
 
 
 
@@ -93,10 +96,34 @@ def generate_report():
 
         pais_y_nombre[pais] = mejor_nombre
 
+    # Estructura sales_by_category (VERSIÓN SIN PANDAS):
+
+    # lista_categorias = []
+    # for venta in ventas:
+    #     if venta.category not in lista_categorias:
+    #         lista_categorias.append(venta.category)
+
+    
+    # ventas_por_categoria = {}
+    # for categoria in lista_categorias:
+    #     precio_total = coleccion_ventas.total_amount_by_category(categoria)
+
+    #     ventas_por_categoria[categoria] = precio_total
+
+
+    # Estructura sales_by_category (VERSIÓN CON PANDAS):
+    lista_dicts_ventas = []
+    for venta in ventas:
+        lista_dicts_ventas.append(venta.to_dict())
+
+    df_ventas = pd.DataFrame(lista_dicts_ventas)
+
+    ventas_por_categoria = df_ventas.groupby("category")["amount"].sum().to_dict()
+    
+
+
     
         
-
-
 
     # DICCIONARIO REPORT:
     report = {
@@ -107,6 +134,8 @@ def generate_report():
                 "clients": lista_clients,
 
                 "top_client_by_country": pais_y_nombre,
+
+                "sales_by_category": ventas_por_categoria
 
 
 
