@@ -72,6 +72,28 @@ def generate_report():
                              "average_sale": average_sale
                              })
 
+    # Estructura de top_client_by_country
+    lista_paises = []
+    for cliente in clientes:
+        if cliente.country not in lista_paises:
+            lista_paises.append(cliente.country)
+
+    pais_y_nombre = {}
+    for pais in lista_paises:
+        clientes_por_pais = coleccion_clientes.clients_by_country(pais)
+
+        mejor_total = 0
+        mejor_nombre = None
+
+        for cliente in clientes_por_pais:
+            total_cliente = coleccion_ventas.total_amount_by_client(cliente.client_id)
+            if total_cliente > mejor_total:
+                mejor_total = total_cliente
+                mejor_nombre = cliente.name
+
+        pais_y_nombre[pais] = mejor_nombre
+
+    
         
 
 
@@ -84,6 +106,8 @@ def generate_report():
 
                 "clients": lista_clients,
 
+                "top_client_by_country": pais_y_nombre,
+
 
 
 
@@ -92,23 +116,4 @@ def generate_report():
     
 
     return report
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
